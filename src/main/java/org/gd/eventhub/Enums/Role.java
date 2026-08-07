@@ -1,4 +1,4 @@
-package org.gd.eventhub.Entity;
+package org.gd.eventhub.Enums;
 
 public enum Role {
     USER,

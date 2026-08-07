@@ -2,7 +2,7 @@ package org.gd.eventhub.Services;
 
 import lombok.RequiredArgsConstructor;
 
-import org.gd.eventhub.Entity.Role;
+import org.gd.eventhub.Enums.Role;
 import org.gd.eventhub.Entity.User;
 import org.gd.eventhub.Repository.UserRepository;
 import org.gd.eventhub.dto.Requests.LoginRequest;
@@ -12,10 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @Service

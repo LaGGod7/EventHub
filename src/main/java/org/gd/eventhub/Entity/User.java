@@ -5,11 +5,13 @@ import jakarta.validation.constraints.Email;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.gd.eventhub.Enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class User implements UserDetails {
     @Pattern(  regexp = "^[6-9]\\d{9}$",
             message = "Phone number must be a valid 10-digit Indian mobile number")
     @Column(nullable = false, unique = true)
-    private String phoneNo;
+    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -94,4 +96,11 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+    @OneToMany(mappedBy = "organizer")
+    private List<Event> events = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings = new ArrayList<>();
+
 }
