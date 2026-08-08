@@ -32,7 +32,7 @@ public class Event {
     private LocalDateTime eventDateTime;
 
     @Column(nullable = false)
-    private Integer totalCapacity;
+    private Integer capacity;
 
     @Column(nullable = false)
     private Integer availableCapacity;

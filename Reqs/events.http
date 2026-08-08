@@ -1,0 +1,18 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+###
+POST http://localhost:8081/api/v1/events
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnb3VyZWVzaEBnbWFpbC5jb20iLCJpYXQiOjE3ODYxNjM5NTksImV4cCI6MTc4NjI1MDM1OX0.5wjjjyv6Qd9o-x_gv7s3RT_gSpi0d4tu5uSO3iEGj3ZOSPbjTPFKJzwzBLwUdukJ
+Content-Type: application/json
+
+{
+    "title": "Java Spring Boot Workshop",
+    "description": "A hands-on workshop",
+    "eventDateTime": "2026-09-15T10:00:00",
+    "capacity": 100,
+    "category": "TECH",
+    "price": 499.0,
+    "venueId": 1
+}
