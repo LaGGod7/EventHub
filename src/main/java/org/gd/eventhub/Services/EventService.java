@@ -7,6 +7,7 @@ import org.gd.eventhub.Entity.User;
 import org.gd.eventhub.Entity.Venue;
 import org.gd.eventhub.Enums.EventStatus;
 import org.gd.eventhub.Exceptions.ForbiddenOperationException;
+import org.gd.eventhub.Exceptions.InvalidCapacityException;
 import org.gd.eventhub.Exceptions.ResourceNotFoundException;
 import org.gd.eventhub.Exceptions.notFounEX.EventNotFoundException;
 import org.gd.eventhub.Mapper.EventMapper;
