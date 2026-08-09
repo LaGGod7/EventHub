@@ -38,7 +38,7 @@ public class EventService {
 
 
 
-    private EventResponse CreateEvent(EventRequest request) {
+    public EventResponse CreateEvent(EventRequest request) {
         User organizer = currentUserService.getCurrentUser();
 
 
@@ -79,7 +79,7 @@ public class EventService {
                 .toList();
     }
 
-    private EventResponse UpdateEvent(EventRequest request,Integer id) {
+    public EventResponse UpdateEvent(EventRequest request,Integer id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(()-> new EventNotFoundException("Event not found"));
 
@@ -105,7 +105,7 @@ public class EventService {
 
     }
 
-    private EventResponse DeleteEvent(Integer id) {
+    public EventResponse DeleteEvent(Integer id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(()-> new EventNotFoundException("Event not found"));
         User currentUser = currentUserService.getCurrentUser();
