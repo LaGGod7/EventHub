@@ -12,7 +12,7 @@ import org.gd.eventhub.Exceptions.ResourceNotFoundException;
 import org.gd.eventhub.Exceptions.notFounEX.EventNotFoundException;
 import org.gd.eventhub.Mapper.EventMapper;
 import org.gd.eventhub.Repository.EventRepository;
-import org.gd.eventhub.Repository.UserRepository;
+
 import org.gd.eventhub.Repository.VenueRepository;
 import org.gd.eventhub.dto.Requests.EventRequest;
 import org.gd.eventhub.dto.Response.EventResponse;

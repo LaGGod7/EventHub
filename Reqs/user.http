@@ -3,16 +3,16 @@ POST http://localhost:8081/auth/register
 Content-Type: application/json
 
 {
-    "name": "Goureesh",
-    "email": "goureesh@gmail.com",
+    "name": "GD",
+    "email": "gd@gmail.com",
     "password": "Password@123",
-    "phoneNumber": "9876543210"
+    "phoneNumber": "9876543219"
 }
 ###
 POST http://localhost:8081/auth/login
 Content-Type: application/json
 
 {
-  "email": "goureesh@gmail.com",
+  "email": "gd@gmail.com",
   "password": "Password@123"
 }

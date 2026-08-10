@@ -35,9 +35,9 @@ public class GlobalExceptionHandler {
     public Map<String, String> resourceNotFoundException(ResourceNotFoundException ex) {
         return error(ex.getMessage());}
 
-    @ExceptionHandler(DuplicateResourceException.class)
+    @ExceptionHandler(ForbiddenOperationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, String> duplicateResourceException(DuplicateResourceException ex) {
+    public Map<String, String> duplicateResourceException(ForbiddenOperationException ex) {
         return error(ex.getMessage());
     }
 }
