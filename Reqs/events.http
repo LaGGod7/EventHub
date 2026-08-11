@@ -4,7 +4,7 @@ GET https://examples.http-client.intellij.net/get
 
 ###
 POST http://localhost:8081/api/v1/events
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnb3VyZWVzaEBnbWFpbC5jb20iLCJpYXQiOjE3ODYxNjM5NTksImV4cCI6MTc4NjI1MDM1OX0.5wjjjyv6Qd9o-x_gv7s3RT_gSpi0d4tu5uSO3iEGj3ZOSPbjTPFKJzwzBLwUdukJ
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnZEBnbWFpbC5jb20iLCJpYXQiOjE3ODY0MzQ5OTksImV4cCI6MTc4NjUyMTM5OX0.sVAt7a42B2zWb62mPQNuUHj5i7GnY6cNQOZYqf-X0fxSLdIn4Fk5fwHTDlWtSZl0
 Content-Type: application/json
 
 {

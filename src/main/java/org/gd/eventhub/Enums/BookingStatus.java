@@ -1,8 +1,9 @@
 package org.gd.eventhub.Enums;
 
 public enum BookingStatus {
-    PENDING,
+    PAYMENT_PENDING,
     APPROVED,
-    REJECTED,
+    PAYMENT_FAILED,
+    CONFIRMED,
     CANCELLED
 }

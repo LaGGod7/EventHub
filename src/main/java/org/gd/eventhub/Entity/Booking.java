@@ -47,6 +47,9 @@ public class Booking {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
+    @OneToOne(mappedBy = "booking")
+    private Payment payment;
+
 
     @PrePersist
     public void prePersist() {

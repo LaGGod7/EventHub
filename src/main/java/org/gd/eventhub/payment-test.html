@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EventHub Payment</title>
+</head>
+
+<body>
+
+<h2>EventHub Payment</h2>
+
+<p>Booking ID: <span id="bookingId">1</span></p>
+<p>Amount: ₹400</p>
+
+<button onclick="startPayment()">
+    Pay ₹400
+</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+    async function startPayment() {
+
+        const bookingId = 1;
+
+        // Your JWT
+        const token = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnZEBnbWFpbC5jb20iLCJpYXQiOjE3ODY0MzU5MDMsImV4cCI6MTc4NjUyMjMwM30.SoNh_-yOdd0lPbFf3HZ_ZiQkdONz6RcGNp4rlh6WFOO1WZY7SGYdpOAkl8lzVmRw";
+
+        // 1. Ask our backend to create/get the Razorpay order
+        const response = await fetch(
+            `http://localhost:8081/api/v1/payments/orders/${bookingId}`,
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        const payment = await response.json();
+
+        console.log(payment);
+
+        // 2. Configure Razorpay Checkout
+        const options = {
+
+            key: payment.keyId,
+
+            amount: payment.amount * 100,
+
+            currency: payment.currency,
+
+            name: "EventHub",
+
+            description: "EventHub Event Booking",
+
+            order_id: payment.razorpayOrderId,
+
+            handler: function (response) {
+
+                console.log("Payment successful!");
+
+                console.log(response);
+
+            },
+
+            prefill: {
+                name: "GD",
+                email: "gd@gmail.com"
+            },
+
+            theme: {
+                color: "#3399cc"
+            }
+        };
+
+        // 3. Open Razorpay Checkout
+        const razorpay = new Razorpay(options);
+
+        razorpay.open();
+    }
+
+</script>
+
+</body>
+</html>

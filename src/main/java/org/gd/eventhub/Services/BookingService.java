@@ -54,7 +54,7 @@ public class BookingService {
         booking.setEvent(event);
         booking.setUser(user);
         booking.setBookingReference(UUID.randomUUID().toString());
-        booking.setBookingStatus(BookingStatus.APPROVED);
+        booking.setBookingStatus(BookingStatus.PAYMENT_PENDING);
         booking.setTotalPrice(price);
 
         event.setAvailableCapacity(event.getAvailableCapacity()-bookingRequest.getTicketCount());
