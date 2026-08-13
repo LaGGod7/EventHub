@@ -8,7 +8,7 @@
 
 <h2>EventHub Payment</h2>
 
-<p>Booking ID: <span id="bookingId">1</span></p>
+<p>Booking ID: <span id="bookingId">2</span></p>
 <p>Amount: ₹400</p>
 
 <button onclick="startPayment()">
@@ -21,10 +21,10 @@
 
     async function startPayment() {
 
-        const bookingId = 1;
+        const bookingId = 2;
 
         // Your JWT
-        const token = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnZEBnbWFpbC5jb20iLCJpYXQiOjE3ODY0MzU5MDMsImV4cCI6MTc4NjUyMjMwM30.SoNh_-yOdd0lPbFf3HZ_ZiQkdONz6RcGNp4rlh6WFOO1WZY7SGYdpOAkl8lzVmRw";
+        const token = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnZEBnbWFpbC5jb20iLCJpYXQiOjE3ODY1OTQ2NjAsImV4cCI6MTc4NjY4MTA2MH0.wJq-8EL_OZc0RkFLOb_Wnh_g33eGPubC2Gij_N-1QZhy3a-JgY5ANFa6L3ZDFHvV";
 
         // 1. Ask our backend to create/get the Razorpay order
         const response = await fetch(
@@ -56,13 +56,74 @@
 
             order_id: payment.razorpayOrderId,
 
-            handler: function (response) {
+            handler: async function (response) {
 
-                console.log("Payment successful!");
-
+                console.log("Razorpay payment response:");
                 console.log(response);
 
+                const verifyResponse = await fetch(
+                    "http://localhost:8081/api/v1/payments/verify",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            razorpayOrderId: response.razorpay_order_id,
+                            razorpayPaymentId: response.razorpay_payment_id,
+                            razorpaySignature: response.razorpay_signature
+                        })
+                    }
+                );
+
+                const result = await verifyResponse.json();
+
+                console.log("Verification response:");
+                console.log(result);
+
+                if (verifyResponse.ok) {
+                    alert("Payment successful and verified!");
+                } else {
+                    alert("Payment verification failed!");
+                }
+            },modal: {
+                ondismiss: function () {
+                    const razorpay = new Razorpay(options);
+
+                    razorpay.on('payment.failed', async function (response) {
+
+                        console.log("Payment failed:");
+                        console.log(response);
+
+                        await fetch(
+                            "http://localhost:8081/api/v1/payments/failed",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Authorization": `Bearer ${token}`,
+                                    "Content-Type": "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    razorpayOrderId: response.error.metadata.order_id,
+                                    razorpayPaymentId: response.error.metadata.payment_id,
+                                    errorCode: response.error.code,
+                                    errorDescription: response.error.description
+                                })
+                            }
+                        );
+
+                        alert("Payment failed. You can try again.");
+                    });
+
+                    razorpay.open();
+                }
             },
+
 
             prefill: {
                 name: "GD",

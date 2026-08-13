@@ -1,7 +1,11 @@
 package org.gd.eventhub.Services;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
+import com.razorpay.Utils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.gd.eventhub.dto.Requests.PaymentFailureRequest;
+import org.gd.eventhub.dto.Requests.PaymentVerifyRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.gd.eventhub.Entity.Booking;
 import org.gd.eventhub.Entity.Payment;
@@ -31,6 +35,8 @@ public class PaymentService {
 
     @Value("${razorpay.key.id}")
     private String razorpayKeyId;
+    @Value("${razorpay.key.secret}")
+    private String razorpayKeySecret;
 
 
 
@@ -84,5 +90,51 @@ public class PaymentService {
         return new PaymentResponse(razorpayOrder.get("id"),amount,"INR",razorpayKeyId);
 
 
+    }
+    @Transactional
+    public PaymentResponse verifyPayment(PaymentVerifyRequest req)throws RazorpayException {
+        Payment payment = paymentRepository.findByRazorpayOrderId(req.getRazorpayOrderId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Payment not found"));
+        User user = currentUserService.getCurrentUser();
+        if(!payment.getBooking().getUser().getId().equals(user.getId())) {
+            throw new ForbiddenOperationException("You are not allowed to pay for this payment");
+        }
+        JSONObject attributes =  new JSONObject();
+
+        attributes.put("razorpay_order_id",req.getRazorpayOrderId());
+        attributes.put("razorpay_payment_id",req.getRazorpayPaymentId());
+        attributes.put("razorpay_signature",req.getRazorpaySignature());
+        Utils.verifyPaymentSignature(attributes,razorpayKeySecret);
+        payment.setRazorpayPaymentId((req.getRazorpayPaymentId()));
+        payment.setRazorpaySignature(req.getRazorpaySignature());
+        payment.setStatus(PaymentStatus.CAPTURED);
+        Booking booking = payment.getBooking();
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
+        paymentRepository.save(payment);
+        bookingRepository.save(booking);
+        return new PaymentResponse(
+                payment.getRazorpayOrderId(),
+                payment.getAmount(),
+                payment.getCurrency(),
+                razorpayKeyId
+        );
+
+    }
+    @Transactional
+    public void markPaymentFailed(PaymentFailureRequest req) throws RazorpayException {
+        Payment payment = paymentRepository.findByRazorpayOrderId(req.getRazorpayOrderId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Payment not found"));
+        User user = currentUserService.getCurrentUser();
+        if(!payment.getBooking().getUser().getId().equals(user.getId())) {
+            throw new ForbiddenOperationException("You are not allowed to pay for this payment");
+
+        }
+        if(payment.getStatus() == PaymentStatus.CAPTURED) {
+           throw new InvalidStatusException("Payment is already captured");
+        }
+        payment.setStatus(PaymentStatus.FAILED);
+        paymentRepository.save(payment);
     }
 }
